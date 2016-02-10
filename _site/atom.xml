@@ -4,7 +4,7 @@
  <title>Ajay Krishna Teja Kavuri</title>
  <link href="http://pseudoaj.com/atom.xml" rel="self"/>
  <link href="http://pseudoaj.com/"/>
- <updated>2016-02-09T21:29:44-05:00</updated>
+ <updated>2016-02-09T21:32:13-05:00</updated>
  <id>http://pseudoaj.com</id>
  <author>
    <name>Ajay Krishna Teja Kavuri</name>
@@ -18,6 +18,7 @@
    <updated>2013-12-28T00:00:00-05:00</updated>
    <id>http://pseudoaj.com/2013/12/28/introducing-hyde</id>
    <content type="html">&lt;p&gt;My blog, profile amd everything else.&lt;/p&gt;
+
 </content>
  </entry>
  
