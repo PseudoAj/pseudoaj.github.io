@@ -7,17 +7,17 @@ gems:			[jekyll-paginate, jekyll-gist]
 #relative_permalinks: true
 
 # Setup
-title:            Ajay Krishna Teja Kavuri
-tagline:          'Pseudo Codes for Pseudo World'
-description:      'Computer Science Jedi'
+title:            Ajay Kavuri
+tagline:          'Computer Science Jedi'
+description:      'Pseudo Codes for Pseudo World'
 url:              http://pseudoaj.com
 baseurl:          /
 
-author:
+author:           'PseudoAJ'
   name:           'Ajay Krishna Teja Kavuri'
   url:            https://twitter.com/pseudoaj
 
 paginate:         5
 
-github:
+github:           https://github.com/pseudoaj
   repo:           https://github.com/pseudoaj/hyde/
