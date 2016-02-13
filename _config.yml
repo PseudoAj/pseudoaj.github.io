@@ -13,11 +13,11 @@ description:      'Pseudo Codes for Pseudo World'
 url:              http://pseudoaj.com
 baseurl:          /
 
-author:           'PseudoAJ'
+author:           
   name:           'Ajay Krishna Teja Kavuri'
   url:            https://twitter.com/pseudoaj
 
 paginate:         5
 
-github:           https://github.com/pseudoaj
+github:           
   repo:           https://github.com/pseudoaj/hyde/
