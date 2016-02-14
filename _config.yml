@@ -8,8 +8,8 @@ gems:			[jekyll-paginate, jekyll-gist]
 
 # Setup
 title:            Ajay Kavuri
-tagline:          'Computer Science Jedi'
-description:      'Pseudo Codes for Pseudo World'
+tagline:          'Pseudo Codes for Pseudo World'
+description:      'Computer Science Jedi'
 url:              http://pseudoaj.com
 baseurl:          /
 

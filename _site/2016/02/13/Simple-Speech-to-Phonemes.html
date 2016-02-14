@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Simple Speech to Phonemes &middot; Ajay Kavuri
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/">
+          Ajay Kavuri
+        </a>
+      </h1>
+      <p class="lead">Pseudo Codes for Pseudo World</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/Resume.html">Resume</a>
+          
+        
+      
+        
+      
+        
+          
+        
+      
+
+      
+    </nav>
+
+    <p>&copy; 2016. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Simple Speech to Phonemes</h1>
+  <span class="post-date">13 Feb 2016</span>
+  <p>Several applications today have close integration of speech input. Personally I think its a great feature to have speech input in any application. Although you might find many API’s to do the job, wouldn’t it be nice if you just have one implicit part of your code do the trick without having to run through whole bunch of stuff to integrate the API and request it every time also not to forget the limit on number of requests (50/day for Google). So here is a simple code that implements HTML5 webkit to do the trick. I used the code to derive the <a href="http://en.wikipedia.org/wiki/Phoneme">phoneme</a> from the speech which is used in several applications.</p>
+
+<p>HTML Code:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"col-lg-6"</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="nx">Results</span><span class="err">:</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span><span class="err">
+</span>  <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"results"</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"final_span"</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"final"</span><span class="o">&gt;&lt;</span><span class="sr">/span&gt;</span><span class="err">
+</span>    <span class="o">&lt;</span><span class="nx">span</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"interim_span"</span> <span class="kr">class</span><span class="o">=</span><span class="s2">"interim"</span><span class="o">&gt;&lt;</span><span class="sr">/span&gt;</span><span class="err">
+</span>  <span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">
+</span>  <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"renderText"</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="sr">/div&gt;</span><span class="err">
+</span><span class="o">&lt;</span><span class="sr">/div&gt; </span></code></pre></figure>
+
+<p>Javascript Code:</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+<span class="kd">var</span> <span class="nx">final_transcript</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">recognizing</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="s1">'webkitSpeechRecognition'</span> <span class="k">in</span> <span class="nb">window</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">recognition</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">webkitSpeechRecognition</span><span class="p">();</span>
+  <span class="nx">recognition</span><span class="p">.</span><span class="nx">continuous</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="nx">recognition</span><span class="p">.</span><span class="nx">interimResults</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="nx">recognition</span><span class="p">.</span><span class="nx">onstart</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">recognizing</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">};</span>
+  <span class="nx">recognition</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">};</span>
+  <span class="nx">recognition</span><span class="p">.</span><span class="nx">onend</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> 
+  <span class="p">{</span>
+    <span class="nx">recognizing</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="nx">jQuery</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'getResult.php?text='</span> <span class="o">+</span> 
+        <span class="nx">final_transcript</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> 
+      <span class="p">{</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'renderText'</span><span class="p">).</span><span class="nx">innerHTML</span> 
+          <span class="o">=</span> <span class="nx">data</span><span class="p">;</span>
+      <span class="p">}</span> <span class="p">)</span>
+  <span class="p">};</span>
+  <span class="nx">recognition</span><span class="p">.</span><span class="nx">onresult</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">interim_transcript</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">resultIndex</span><span class="p">;</span> 
+        <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">event</span><span class="p">.</span><span class="nx">results</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">isFinal</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">final_transcript</span> <span class="o">+=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">].</span><span class="nx">transcript</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">interim_transcript</span> <span class="o">+=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">].</span><span class="nx">transcript</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">final_transcript</span> <span class="o">=</span> <span class="nx">capitalize</span><span class="p">(</span><span class="nx">final_transcript</span><span class="p">);</span>
+    <span class="nx">final_span</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">linebreak</span><span class="p">(</span><span class="nx">final_transcript</span><span class="p">);</span>
+    <span class="nx">interim_span</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">linebreak</span><span class="p">(</span><span class="nx">interim_transcript</span><span class="p">);</span>
+    
+  <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">two_line</span> <span class="o">=</span> <span class="sr">/</span><span class="se">\n\n</span><span class="sr">/g</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">one_line</span> <span class="o">=</span> <span class="sr">/</span><span class="se">\n</span><span class="sr">/g</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">linebreak</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">two_line</span><span class="p">,</span> <span class="s1">'&lt;p&gt;&lt;/p&gt;'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="nx">one_line</span><span class="p">,</span> <span class="s1">'&lt;br&gt;'</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">capitalize</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">m</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">();</span> <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">startDictation</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">recognizing</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">recognition</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">final_transcript</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+  <span class="nx">recognition</span><span class="p">.</span><span class="nx">lang</span> <span class="o">=</span> <span class="s1">'en-US'</span><span class="p">;</span>
+  <span class="nx">recognition</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+  <span class="nx">final_span</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+  <span class="nx">interim_span</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">&lt;/script&gt;</span>  </code></pre></figure>
+
+<p>Further, you need a simple php file to do the phoneme generation. Here is the PHP code:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+ <span class="nv">$input</span><span class="o">=</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">'text'</span><span class="p">];</span>
+ <span class="nv">$words</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s1">' '</span><span class="p">,</span> <span class="nv">$input</span><span class="p">);</span>
+ <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"http://api.corrasable.com/phonemes/"</span><span class="p">);</span>
+ <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_POST</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+ <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_POSTFIELDS</span><span class="p">,</span> <span class="s2">"text=</span><span class="si">{</span><span class="nv">$input</span><span class="si">}</span><span class="s2">"</span><span class="p">);</span>
+ <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HEADER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+ <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+ <span class="nb">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+ <span class="cp">?&gt;</span></code></pre></figure>
+
+<p>I have tried the app locally and it works perfectly for me. Also I have embedded the above code into bootstrap to make it look elegant, if you want to try it out on your local machine feel free to clone the repository: <a href="https://github.com/PseudoAj/AjSpeechToPhonemes.git">https://github.com/PseudoAj/AjSpeechToPhonemes.git</a></p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/02/13/python-opencv-adjust-camera-parameters.html">
+            Python OpenCV Adjusting Camera Parameters
+            <small>13 Feb 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+  </body>
+</html>
