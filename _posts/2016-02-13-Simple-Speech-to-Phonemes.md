@@ -2,7 +2,7 @@
 layout: post
 title: Simple Speech to Phonemes
 ---
-
+![Illustration](https://cloud.githubusercontent.com/assets/3308051/13057486/9a0ae2f0-d3ea-11e5-8d70-0243c8cabb65.jpg "Illustration")
 Several applications today have close integration of speech input. Personally I think its a great feature to have speech input in any application. Although you might find many API's to do the job, wouldn't it be nice if you just have one implicit part of your code do the trick without having to run through whole bunch of stuff to integrate the API and request it every time also not to forget the limit on number of requests (50/day for Google). So here is a simple code that implements HTML5 webkit to do the trick. I used the code to derive the <a href="http://en.wikipedia.org/wiki/Phoneme">phoneme</a> from the speech which is used in several applications.
 
 HTML Code:
