@@ -2,6 +2,7 @@
 layout: post
 title: Python OpenCV Adjusting Camera Parameters
 ---
+![Stereo Camera](https://cloud.githubusercontent.com/assets/3308051/13057389/e3730cde-d3e9-11e5-81c4-157b7c8f9a63.png "Stereo Camera")
 
 I was working on a project for object localization using stereo camera. I was facing trouble in processing the active markers accurately. I was trying lot of things and didn't had much success, just by playing around with camera parameters I was able to get the job done. So here is the python code to set the parameters:
 
